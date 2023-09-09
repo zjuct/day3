@@ -1,20 +1,10 @@
-// Rc的实现应包含以下要点
-// 实际value的所有权不应被任何一个Rc持有，因此考虑Box::leak()
-// clone出的所有Rc持有与原Rc相同的指针(这里的'指针'或许可以用&'static实现)
-// 同理，持有相同数据的Rc应共享引用计数，并且该引用计数可以被任何一个Rc修改
-// 因此在编译期需要持有该引用计数的多个可变引用
-// 考虑Box<Cell<usize>>，然后利用Box::leak()获取&'static Cell<usize>
-// 当最后一个Rc离开作用域时，利用Box::from_raw()将原先leak出的数据重新纳入所有权体系
-
 use std::{
     cell::Cell,
     ops::{Deref, Drop},
     boxed::Box,
 };
 
-// 但是这样实现有限制，即T: 'static
 pub struct MyRc2<'a, T> {
-    // 能不能用'a绕过去，因为Box::leak()返回的是&'static，'static必然比'a长
     value: &'a T,
     strong_count: &'static Cell<usize>,
 }

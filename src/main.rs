@@ -2,9 +2,8 @@
 extern crate std;
 
 mod HashMap;
-// mod MyRc;
 mod stack;
-mod MyRc2;
+mod MyRc;
 
 
 fn main() {
